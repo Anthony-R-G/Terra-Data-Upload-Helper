@@ -9,7 +9,7 @@
 import UIKit
 
 class ViewController: UIViewController {
-
+    
     @IBOutlet weak var scrollView: UIScrollView!
     
     @IBOutlet var inputTextFields: [UITextField]!
@@ -23,6 +23,24 @@ class ViewController: UIViewController {
     @IBOutlet weak var popTrendSC: UISegmentedControl!
     
     @IBOutlet weak var conservationStatusSC: UISegmentedControl!
+    
+    
+    @IBAction func clearFieldsButtonPressed(_ sender: UIButton) {
+        let alertVC = UIAlertController(title: nil, message: "Are you sure?", preferredStyle: .alert)
+        let confirm = UIAlertAction(title: "OK", style: .destructive) { (action) in
+            self.inputTextViews.forEach {
+                $0.text = ""
+            }
+            self.inputTextFields.forEach {
+                $0.text = ""
+            }
+        }
+        
+        let cancel = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        alertVC.addAction(confirm)
+        alertVC.addAction(cancel)
+        self.present(alertVC, animated: true, completion: nil)
+    }
     
     private func validateTextFields() {
         inputTextViews.forEach {
@@ -106,13 +124,18 @@ class ViewController: UIViewController {
         self.present(alertVC, animated: true, completion: nil)
     }
     
-    
-    
+        
     override func viewDidLoad() {
         super.viewDidLoad()
-        scrollView.contentSize = CGSize(width: view.frame.width, height: view.frame.height + 2700)
+        scrollView.contentSize = CGSize(width: view.frame.width, height: view.frame.height + 2800)
     }
+    
+}
 
+extension UIScrollView {
+    func updateContentView() {
+        contentSize.height = subviews.sorted(by: { $0.frame.maxY < $1.frame.maxY } ).last?.frame.maxY ?? contentSize.height
+    }
 }
 
 
